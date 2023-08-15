@@ -1,6 +1,7 @@
 package io.xhub.smwall.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.xhub.smwall.commands.UserAddCommand;
 import io.xhub.smwall.commands.UserUpdateCommand;
 import io.xhub.smwall.constants.ApiClientErrorCodes;
 import io.xhub.smwall.constants.ApiPaths;
@@ -9,6 +10,7 @@ import io.xhub.smwall.domains.Authority;
 import io.xhub.smwall.domains.User;
 import io.xhub.smwall.exceptions.BusinessException;
 import io.xhub.smwall.service.UserService;
+import io.xhub.smwall.utlis.JsonUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -27,8 +29,7 @@ import java.util.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -47,6 +48,8 @@ public class UserControllerTest {
     private UserService userService;
 
     UserUpdateCommand userUpdateCommand;
+
+    UserAddCommand addCommand;
 
     @Test
     public void should_updateUser_when_userExists() throws Exception {
@@ -136,8 +139,8 @@ public class UserControllerTest {
 
     @Test
     public void should_deleteUser_when_userExists() throws Exception {
-    User user = new User();
-    user.setId("userId");
+        User user = new User();
+        user.setId("userId");
 
         mockMvc.perform(delete(ApiPaths.V1 + ApiPaths.USERS + "/" + user.getId()))
                 .andExpect(status().isNoContent());
@@ -158,6 +161,8 @@ public class UserControllerTest {
         verify(userService, times(1)).deleteUserById(invalidId);
     }
 
+
+    @Test
     public void should_toggleUserActivation_when_userExist() throws Exception {
         String userId = "testId";
         mockMvc.perform(MockMvcRequestBuilders.put(ApiPaths.V1 + ApiPaths.USERS + "/" + userId + ApiPaths.USER_ACCOUNT_STATUS)
@@ -165,6 +170,27 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
         verify(userService, times(1)).toggleUserActivation(userId);
+    }
+
+    @Test
+    public void should_createNewUser_when_payloadIsValid() throws Exception {
+        Authority authority = new Authority("authorityId1", RoleName.ROLE_ADMIN);
+        Set<Authority> authorities = new HashSet<>();
+        authorities.add(authority);
+        addCommand = new UserAddCommand(
+                "Valid firstName",
+                "Valid lastName",
+                "Validemail@gmail.com",
+                authorities
+        );
+        when(userService.createUser(addCommand)).thenReturn(any(User.class));
+
+        mockMvc.perform(post(ApiPaths.V1 + ApiPaths.USERS)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonUtils.toJsonString(addCommand)))
+                .andExpect(status().isCreated());
+
+        verify(userService, times(1)).createUser(any(UserAddCommand.class));
     }
 }
 

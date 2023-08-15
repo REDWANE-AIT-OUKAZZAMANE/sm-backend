@@ -12,15 +12,13 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @Api(tags = "Media Management Resource")
 @RestController
 @RequestMapping(ApiPaths.V1 + ApiPaths.MEDIA)
+@PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MODERATOR')")
 @RequiredArgsConstructor
 public class MediaController {
     private final MediaService mediaService;

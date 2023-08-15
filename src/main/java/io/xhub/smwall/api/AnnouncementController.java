@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @Api(tags = "Announcement Management Resource")
@@ -36,6 +37,7 @@ public class AnnouncementController {
     }
 
     @ApiOperation(value = "Delete an announcement by ID")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAnnouncement(@PathVariable String id) {
         announcementService.deleteAnnouncementById(id);
@@ -44,12 +46,14 @@ public class AnnouncementController {
 
 
     @ApiOperation(value = "Create a new announcement")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping()
     public ResponseEntity<AnnouncementDTO> addAnnouncement(@RequestBody @Valid AnnouncementAddCommand announcementAddCommand) {
         return ResponseEntity.status(HttpStatus.CREATED).body(announcementMapper.toDTO(announcementService.addAnnouncement(announcementAddCommand)));
     }
 
     @ApiOperation(value = "Update an announcement")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PatchMapping("/{id}")
     public ResponseEntity<AnnouncementDTO> updateAnnouncement(@PathVariable String id, @RequestBody @Valid AnnouncementUpdateCommand announcementUpdateCommand) {
         return ResponseEntity.ok()

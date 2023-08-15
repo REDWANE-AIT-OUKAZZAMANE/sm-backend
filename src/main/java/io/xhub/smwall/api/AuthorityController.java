@@ -8,6 +8,7 @@ import io.xhub.smwall.mappers.AuthorityMapper;
 import io.xhub.smwall.service.AuthorityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 @Api(tags = "Authority Management Resource")
 @RestController
 @RequestMapping(ApiPaths.V1 + ApiPaths.AUTHORITIES)
+@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 @RequiredArgsConstructor
 public class AuthorityController {
     private final AuthorityService authorityService;

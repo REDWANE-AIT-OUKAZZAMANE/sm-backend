@@ -5,16 +5,24 @@ import com.querydsl.core.types.Predicate;
 import io.xhub.smwall.commands.UserAddCommand;
 import io.xhub.smwall.commands.UserUpdateCommand;
 import io.xhub.smwall.constants.ApiClientErrorCodes;
+import io.xhub.smwall.constants.EmailTemplates;
 import io.xhub.smwall.domains.User;
 import io.xhub.smwall.exceptions.BusinessException;
 import io.xhub.smwall.repositories.UserRepository;
+import io.xhub.smwall.utlis.EmailUtils;
 import io.xhub.smwall.utlis.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.mail.MessagingException;
+import java.io.IOException;
+import java.util.List;
+
 
 @Service
 @Transactional(readOnly = true)
@@ -23,7 +31,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
-
+    @Autowired
+    private EmailUtils emailUtils;
 
     public User getUser() {
         return SecurityUtils.getCurrentUserLogin()
@@ -71,7 +80,30 @@ public class UserService {
 
     public void toggleUserActivation(String userId) {
         User user = getUserById(userId);
-            user.setActivated(!user.isActivated());
-            userRepository.save(user);
+        user.setActivated(!user.isActivated());
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void sendLinkToUserToSetPassword(List<String> userIds) throws MessagingException, IOException {
+        log.info("Start sending link by email to user to set password");
+        String htmlTemplatePath = EmailTemplates.TemplatePathToSignUp;
+
+        for (String userId : userIds) {
+            User user = getUserById(userId);
+
+            if (user.getPassword() == null || user.getPassword().isEmpty()) {
+                emailUtils.sendEmail(user, htmlTemplatePath);
+            }
+        }
+    }
+
+    public void sendLinkToUserToResetPassword(String email) throws MessagingException, IOException {
+        log.info("Start sending link by email : {} to user to reset password ", email);
+        String htmlTemplatePath = EmailTemplates.TemplatePathToResetPassword;
+
+        User user = findUserByLogin(email);
+
+        emailUtils.sendEmail(user, htmlTemplatePath);
     }
 }

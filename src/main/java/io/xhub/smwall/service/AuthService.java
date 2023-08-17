@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,8 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
 
     public String authenticate(LoginCommand loginCommand) {
         Authentication authentication = authenticationManager.authenticate(
@@ -38,5 +41,14 @@ public class AuthService {
         return SecurityUtils.getCurrentUserLogin()
                 .flatMap(userRepository::findFirstByEmailIgnoreCase)
                 .orElseThrow(() -> new BusinessException(ApiClientErrorCodes.USER_NOT_FOUND.getErrorMessage()));
+    }
+
+    public void updatePassword(String email, String password) {
+        log.info("start setting password of user with email : {}", email);
+        User user = userRepository.findFirstByEmailIgnoreCase(email)
+                .orElseThrow(() -> new BusinessException(ApiClientErrorCodes.USER_NOT_FOUND.getErrorMessage()));
+
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
     }
 }

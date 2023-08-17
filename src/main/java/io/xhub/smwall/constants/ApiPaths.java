@@ -22,5 +22,8 @@ public final class ApiPaths {
     public static final String USERS = "/users";
     public static final String AUTHORITIES = "/authorities";
     public static final String USER_ACCOUNT_STATUS = "/toggle-status";
+    public static final String SIGNUP = "/signup";
+    public static final String RESET_PASSWORD = "/reset-password";
+    public static final String UPDATE_PASSWORD = "/update-password";
 
 }

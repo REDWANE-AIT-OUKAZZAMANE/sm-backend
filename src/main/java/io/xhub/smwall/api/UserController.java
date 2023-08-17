@@ -20,18 +20,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
+import java.util.List;
+
 @Api(tags = "User Management Resource")
 @RestController
 @RequestMapping(ApiPaths.V1 + ApiPaths.USERS)
-@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 @RequiredArgsConstructor
 public class UserController {
-
     private final UserService userService;
 
     private final UserMapper userMapper;
 
     @ApiOperation(value = "List of users")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') ")
     @GetMapping
     public ResponseEntity<Page<UserDTO>> getAllUsers(UserQuery userQuery, @ParameterObject Pageable pageable) {
         return ResponseEntity.ok(
@@ -41,6 +44,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "Update user")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') ")
     @PatchMapping("/{userId}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable String userId, @RequestBody @Valid UserUpdateCommand userUpdateCommand) {
         return ResponseEntity.ok()
@@ -48,12 +52,14 @@ public class UserController {
     }
 
     @ApiOperation(value = "Create a new User")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') ")
     @PostMapping
     public ResponseEntity<UserDTO> CreateUser(@RequestBody @Valid UserAddCommand userAddCommand) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toDTO(userService.createUser(userAddCommand)));
     }
 
     @ApiOperation(value = "Delete user by ID")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') ")
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable String userId) {
         userService.deleteUserById(userId);
@@ -61,9 +67,26 @@ public class UserController {
     }
 
     @ApiOperation(value = "Activate or Deactivate User Account")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') ")
     @PutMapping("/{userId}" + ApiPaths.USER_ACCOUNT_STATUS)
     public ResponseEntity<Void> toggleUserActivation(@PathVariable("userId") String userId) {
         userService.toggleUserActivation(userId);
         return ResponseEntity.ok().build();
     }
+
+    @ApiOperation(value = "Send link to user by email to signUp")
+    @PostMapping(ApiPaths.SIGNUP)
+    public ResponseEntity<Void> sendLinkToSignUp(@RequestBody List<String> userIds) throws MessagingException, IOException {
+        userService.sendLinkToUserToSetPassword(userIds);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation(value = "Send link to user by email to reset password")
+    @PostMapping(ApiPaths.RESET_PASSWORD + "/{email}")
+    public ResponseEntity<Void> sendLinkToResetPassword(@PathVariable String email) throws MessagingException, IOException {
+        userService.sendLinkToUserToResetPassword(email);
+        return ResponseEntity.ok().build();
+    }
+
 }

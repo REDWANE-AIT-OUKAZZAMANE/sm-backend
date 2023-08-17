@@ -57,4 +57,12 @@ public class AuthController {
         return ResponseEntity.ok()
                 .body(userMapper.toDTO(authService.getCurrentUser()));
     }
+
+    @ApiOperation(value = "Sign up or update password")
+    @PatchMapping(ApiPaths.UPDATE_PASSWORD)
+    public ResponseEntity<Void> updatePassword(@RequestBody LoginCommand loginCommand) {
+        authService.updatePassword(loginCommand.getEmail(), loginCommand.getPassword());
+
+        return ResponseEntity.ok().build();
+    }
 }

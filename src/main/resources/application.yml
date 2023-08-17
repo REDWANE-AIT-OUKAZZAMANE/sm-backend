@@ -52,6 +52,15 @@ spring:
     multipart:
       max-file-size: 2MB
       enabled: true
+  email:
+   username: ${USERNAME}
+   password: ${PASSWORD}
+   smtp:
+      auth : true
+      host: ${HOST}
+      port: ${PORT}
+      starttlsEnable: true
+      sslProtocols: ${SSL-PROTOCOLS}
 
 application:
   cache:

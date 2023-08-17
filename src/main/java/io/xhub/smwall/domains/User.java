@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Set;
+import java.util.function.BiConsumer;
 
 
 @Document(collection = "users")
@@ -42,7 +43,9 @@ public class User extends AbstractAuditingDocument {
     @DBRef
     private Set<Authority> authorities;
 
-    public void update(final UserUpdateCommand userUpdateCommand) {
+    public void update(final BiConsumer<String, String> userAlreadyExists, final UserUpdateCommand userUpdateCommand) {
+
+        userAlreadyExists.accept(userUpdateCommand.getEmail(), this.id);
 
         if (userUpdateCommand.getFirstName() != null) {
             this.setFirstName(userUpdateCommand.getFirstName());

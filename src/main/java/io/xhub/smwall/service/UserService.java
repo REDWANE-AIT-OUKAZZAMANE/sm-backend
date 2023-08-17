@@ -60,10 +60,16 @@ public class UserService {
                 .orElseThrow(() -> new BusinessException(ApiClientErrorCodes.USER_NOT_FOUND.getErrorMessage()));
     }
 
+    public void userAlreadyExists(String email, String userId) {
+        if (userRepository.existsByEmailIgnoreCaseAndIdNot(email, userId)) {
+            throw new BusinessException(ApiClientErrorCodes.USER_ALREADY_EXISTS.getErrorMessage());
+        }
+    }
+
     public User updateUser(String userId, UserUpdateCommand userUpdateCommand) {
         log.info("Start updating user by id {} :", userId);
         User user = getUserById(userId);
-        user.update(userUpdateCommand);
+        user.update(this::userAlreadyExists,userUpdateCommand);
         return userRepository.save(user);
     }
 

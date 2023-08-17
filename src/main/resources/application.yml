@@ -55,6 +55,7 @@ spring:
   email:
    username: ${USERNAME}
    password: ${PASSWORD}
+   link-dev: ${LINK-DEV}
    smtp:
       auth : true
       host: ${HOST}

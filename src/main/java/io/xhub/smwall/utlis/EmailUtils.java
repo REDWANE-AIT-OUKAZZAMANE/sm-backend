@@ -59,6 +59,7 @@ public class EmailUtils {
 
         htmlContent = htmlContent.replace("{{ personalizedTitle }}", personalizedTitle);
         htmlContent = htmlContent.replace("{email}", customEmail);
+        htmlContent = htmlContent.replace("{linkDev}", emailProperties.getLinkDev());
         message.setContent(htmlContent, "text/html; charset=utf-8");
 
         Transport.send(message);

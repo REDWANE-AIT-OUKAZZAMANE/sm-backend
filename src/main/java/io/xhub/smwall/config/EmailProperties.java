@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 public class EmailProperties {
     private String username;
     private String password;
+    private String linkDev;
     private Smtp smtp;
 
     @Data

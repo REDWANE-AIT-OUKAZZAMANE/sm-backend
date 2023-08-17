@@ -2,6 +2,8 @@ package io.xhub.smwall.domains;
 
 import io.xhub.smwall.commands.UserAddCommand;
 import io.xhub.smwall.commands.UserUpdateCommand;
+import io.xhub.smwall.constants.ApiClientErrorCodes;
+import io.xhub.smwall.exceptions.BusinessException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.function.Predicate;
 
 
 @Document(collection = "users")
@@ -61,7 +64,12 @@ public class User extends AbstractAuditingDocument {
         }
     }
 
-    public static User create(final UserAddCommand command) {
+    public static User create(Predicate<String> alreadyExists, final UserAddCommand command) {
+
+        if(alreadyExists.test(command.getEmail())){
+            throw new BusinessException((ApiClientErrorCodes.USER_ALREADY_EXISTS.getErrorMessage()));
+        }
+
         User user = new User();
         user.setFirstName(command.getFirstName());
         user.setLastName(command.getLastName());

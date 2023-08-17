@@ -9,7 +9,6 @@ import io.xhub.smwall.domains.Authority;
 import io.xhub.smwall.domains.User;
 import io.xhub.smwall.exceptions.BusinessException;
 import io.xhub.smwall.repositories.UserRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,7 +47,7 @@ public class UserServiceTest {
         addCommand = new UserAddCommand(
                 "testUser",
                 "test",
-                "testUser@gmail.com",
+                "user@gmail.com",
                 authorities
         );
         user = new User();
@@ -69,6 +68,7 @@ public class UserServiceTest {
                 "newEmail@gmail.com",
                 authorities
         );
+
     }
     @Test
     public void should_returnAllUsers_withoutPredicate() {
@@ -166,13 +166,33 @@ public class UserServiceTest {
 
     @Test
     void should_createUser_when_userIsValid() {
-        User expectedUser = User.create(addCommand);
+        Set<Authority> authorities = new HashSet<>();
+        Authority adminAuthority = new Authority(
+                "6466001f342fd96df0b30fae",
+                RoleName.ROLE_ADMIN
+        );
+        authorities.add(adminAuthority);
+
+        final UserAddCommand userAddCommand = new UserAddCommand(
+                "firstName",
+                "lastName",
+                "email@email.com",
+                authorities
+        );
+
+        final User expectedUser = new User();
+        expectedUser.setId("userId");
+        expectedUser.setEmail("email@email.com");
+        expectedUser.setFirstName("firstName");
+        expectedUser.setLastName("lastName");
+        expectedUser.setAuthorities(authorities);
+
+        when(userRepository.existsByEmailIgnoreCase(expectedUser.getEmail())).thenReturn(false);
 
         when(userRepository.save(any())).thenReturn(expectedUser);
-        User result = userService.createUser(addCommand);
 
-        assertNotNull(result);
-        Assertions.assertEquals(expectedUser, result);
+        assertEquals(expectedUser,userService.createUser(userAddCommand));
+
         verify(userRepository, times(1)).save(any());
     }
 

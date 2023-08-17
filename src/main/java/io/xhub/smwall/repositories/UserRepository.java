@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface UserRepository extends MongoRepository<User, String>, QuerydslPredicateExecutor<User> {
     Optional<User> findFirstByEmailIgnoreCase(String email);
     boolean existsByEmailIgnoreCaseAndIdNot(String email, String id);
+    boolean existsByEmailIgnoreCase(String email);
 }

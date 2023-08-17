@@ -75,8 +75,9 @@ public class UserService {
 
     public User createUser(final UserAddCommand userAddCommand) {
         log.info("Start creating a new user");
-        return userRepository.save(User.create(userAddCommand));
+        return userRepository.save(User.create(userRepository::existsByEmailIgnoreCase,userAddCommand));
     }
+
 
     public void deleteUserById(String id) {
         log.info("Start deleting user with ID: {}", id);

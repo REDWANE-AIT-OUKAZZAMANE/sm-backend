@@ -91,6 +91,13 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void userAlreadySignedUp(String email){
+        log.info("Check if user with email : {} already signed Up", email);
+        User user = findUserByLogin(email);
+        if (user.getPassword() == null || user.getPassword().isEmpty()) {
+            throw new BusinessException(ApiClientErrorCodes.USER_MUST_SIGN_UP.getErrorMessage());
+        }
+    }
     @Transactional
     public void sendLinkToUserToSetPassword(List<String> userIds) throws MessagingException, IOException {
         log.info("Start sending link by email to user to set password");

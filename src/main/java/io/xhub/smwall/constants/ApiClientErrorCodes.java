@@ -19,7 +19,8 @@ public enum ApiClientErrorCodes {
     WALL_SETTING_NOT_FOUND(12, "wall.setting.not.found"),
     ANNOUNCEMENT_ALREADY_EXISTS(13, "announcement.already.exists"),
     MEDIA_HIDDEN(14, "media.hidden"),
-    USER_ALREADY_EXISTS(15,"user.already.exists");
+    USER_ALREADY_EXISTS(15,"user.already.exists"),
+    USER_MUST_SIGN_UP(16,"user.must.sign.up");
 
 
     private final Integer code;

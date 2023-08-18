@@ -89,4 +89,11 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @ApiOperation(value = "check if user already signed up")
+    @PostMapping(ApiPaths.SIGNED_UP + "/{email}")
+    public ResponseEntity<Void> signedUpCheck(@PathVariable String email){
+        userService.userAlreadySignedUp(email);
+        return ResponseEntity.ok().build();
+    }
+
 }

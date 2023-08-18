@@ -47,6 +47,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, ApiPaths.V1 + ApiPaths.AUTH + ApiPaths.LOGIN).permitAll()
                 .requestMatchers(HttpMethod.PATCH, ApiPaths.V1 + ApiPaths.AUTH + ApiPaths.UPDATE_PASSWORD).permitAll()
                 .requestMatchers(HttpMethod.POST, ApiPaths.V1 + ApiPaths.USERS + ApiPaths.SIGNUP).permitAll()
+                .requestMatchers(HttpMethod.POST, ApiPaths.V1 + ApiPaths.USERS + ApiPaths.SIGNED_UP + "/**").permitAll()
                 .requestMatchers(HttpMethod.POST, ApiPaths.V1 + ApiPaths.USERS + ApiPaths.RESET_PASSWORD + "/**").permitAll()
                 .requestMatchers(HttpMethod.GET, ApiPaths.V1 + ApiPaths.HEADER).permitAll()
                 .requestMatchers(HttpMethod.GET, ApiPaths.V1 + ApiPaths.FOOTER).permitAll()

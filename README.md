@@ -57,8 +57,7 @@ For building and running the application you need :
 ### Cloning the project :
 
 ```sh
-SSH: git clone git@gitlab.com/xhub-org/p/social-media-wall/sm-backend.git
-HTTPS: git clone https://gitlab.com/xhub-org/p/social-media-wall/sm-backend.git
+HTTPS: git clone https://github.com/REDWANE-AIT-OUKAZZAMANE/sm-backend.git
 ```
 
 ### Setup Cloud MongoDB
@@ -173,13 +172,6 @@ in dev and qa environment)
 
 ## 7. Contributors :
 - Redwan Ait Oukazzamane (FullStack Developer)
-- Mariam El Ayadi (Squad Lead)
-- Khadija Chafi (Squad Lead)
-- Ihyadn Ayoub (FullStack Developer)
-- Hassan Ait Nacer(FullStack Developer)
-- Oussama Aimarah (FullStack Developer)
-- Ayoub Ouakki (FullStack Developer)
-- Chaimae Messaoudi (FullStack Developer)
 
 ## 8. References :
 
@@ -197,5 +189,3 @@ For further reference, please consider the following sections:
 - [Flyway Database Migration](https://www.baeldung.com/database-migrations-with-flyway)
 - [Lombok](https://projectlombok.org/features/all)
 - [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
-
-xHub Team, Made with ❤️

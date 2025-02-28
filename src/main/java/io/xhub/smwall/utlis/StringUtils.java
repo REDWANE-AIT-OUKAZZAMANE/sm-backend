@@ -5,7 +5,7 @@ public class StringUtils {
     private static final String YOUTUBE_WATCH_URL = "https://www.youtube.com/watch";
 
     public static String concat(String str1, String str2) {
-        return new StringBuilder().append(str1).append(str2).toString();
+        return str1 + str2;
     }
 
     public static String generateStringEmbedUrl(String channelId) {
@@ -13,11 +13,11 @@ public class StringUtils {
     }
 
     public static String prependHashtag(String hashtag) {
-        return new StringBuilder().append("#").append(hashtag.substring(hashtag.indexOf('.') + 1)).toString();
+        return "#" + hashtag.substring(hashtag.indexOf('.') + 1);
     }
 
     public static String prependAtSign(String mention) {
-        return new StringBuilder().append("@").append(mention).toString();
+        return "@" + mention;
     }
 
     public static String getYouTubeVideoUrlFromId(String videoId) {
@@ -25,11 +25,9 @@ public class StringUtils {
     }
 
     public static String getBase64Data(String contentType, String data) {
-        return new StringBuilder()
-                .append("data:")
-                .append(contentType)
-                .append(";base64,")
-                .append(data)
-                .toString();
+        return "data:" +
+                contentType +
+                ";base64," +
+                data;
     }
 }

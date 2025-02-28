@@ -19,16 +19,15 @@ import java.nio.charset.StandardCharsets;
 public class FilterMedia {
     private ContentFilterProperties contentFilterProperties;
 
-    public Boolean filterContent(Media media) {
+    public void filterContent(Media media) {
         log.error("start to filter content image /video ");
 
         try {
             String scriptPath = getScriptPath(media.getType());
             float nsfwScore = executePythonScript(scriptPath, media.getUrl());
-            return setCleanliness(media, nsfwScore);
+            setCleanliness(media, nsfwScore);
         } catch (Exception e) {
             log.error("Failed to filter content: {}", e.getMessage());
-            return true;
         }
     }
 
@@ -52,11 +51,10 @@ public class FilterMedia {
         return Float.parseFloat(outputStream.toString(StandardCharsets.UTF_8).trim());
     }
 
-    private Boolean setCleanliness(Media media, float nsfwScore) {
+    private void setCleanliness(Media media, float nsfwScore) {
         media.setClean(nsfwScore < 0.1);
         media.setHidden(!media.getClean());
         log.info("Media: {}, Clean: {}", media.getUrl(), media.getClean());
-        return media.getClean();
     }
 
 }

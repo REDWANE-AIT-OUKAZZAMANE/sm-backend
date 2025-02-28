@@ -172,7 +172,7 @@ in dev and qa environment)
 - http://localhost:8080/api/swagger-ui.html
 
 ## 7. Contributors :
-
+- Redwan Ait Oukazzamane (FullStack Developer)
 - Mariam El Ayadi (Squad Lead)
 - Khadija Chafi (Squad Lead)
 - Ihyadn Ayoub (FullStack Developer)
@@ -180,7 +180,6 @@ in dev and qa environment)
 - Oussama Aimarah (FullStack Developer)
 - Ayoub Ouakki (FullStack Developer)
 - Chaimae Messaoudi (FullStack Developer)
-- Redwan Ait Oukazzamane (FullStack Developer)
 
 ## 8. References :
 

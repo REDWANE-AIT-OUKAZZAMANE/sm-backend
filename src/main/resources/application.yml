@@ -17,7 +17,7 @@ spring:
     mongodb:
       authentication-database: admin
       port: ${DB_PORT:27017}
-      uri: mongodb+srv://root:42SeecaPiOWkXGU0@cluster0.7bkt6ir.mongodb.net/?retryWrites=true&w=majority
+      uri: mongodb+srv://bigbosslabo:AP4jKEwpV3u1B7iA@sm-wall.ldb9acb.mongodb.net/?retryWrites=true&w=majority
       database: SM_wall
   flyway:
     baseline-on-migrate: true

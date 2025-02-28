@@ -78,11 +78,8 @@ public class YoutubeScheduler {
                     .getItems()
                     .stream()
                     .filter(this::isNewYoutubeMedia)
-                    .map(youtubeMediaDTO -> {
-                        youtubeMediaDTO.getSourceTypes()
-                                .addAll(Collections.singletonList(youtubeProperties.getKeyword()));
-                        return youtubeMediaDTO;
-                    })
+                    .peek(youtubeMediaDTO -> youtubeMediaDTO.getSourceTypes()
+                            .add(youtubeProperties.getKeyword()))
                     .collect(Collectors.toList());
 
             if (!newMedia.isEmpty()) {

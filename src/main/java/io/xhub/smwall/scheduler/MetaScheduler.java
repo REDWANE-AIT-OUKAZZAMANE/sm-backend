@@ -51,11 +51,10 @@ public class MetaScheduler {
 
     private List<String> createAllowedMatchesList() {
         List<String> hashtags = metaProperties.getHashtags().keySet().stream()
-                .map(key -> StringUtils.prependHashtag(key))
-                .collect(Collectors.toList());
+                .map(StringUtils::prependHashtag)
+                .toList();
         String mention = StringUtils.prependAtSign(metaProperties.getUsername());
-        List<String> allowedMatches = new ArrayList<>();
-        allowedMatches.addAll(hashtags);
+        List<String> allowedMatches = new ArrayList<>(hashtags);
         allowedMatches.add(mention);
         return allowedMatches;
     }
@@ -77,12 +76,11 @@ public class MetaScheduler {
                             IG_HASHTAG_MEDIA_REQUEST_FIELDS))
                     .flatMap(res -> res.getData().stream())
                     .filter(this::isNewIGMedia)
-                    .map(instagramMediaDTO -> {
+                    .peek(instagramMediaDTO -> {
                         if (instagramMediaDTO.getCaption() != null) {
                             instagramMediaDTO.getSourceTypes()
                                     .addAll(RegexUtils.findAllowedMatches(instagramMediaDTO.getCaption(), RegexPatterns.SOURCE_TYPES, allowedMatches));
                         }
-                        return instagramMediaDTO;
                     })
                     .collect(Collectors.toList());
             if (!newMedia.isEmpty()) {
@@ -133,12 +131,11 @@ public class MetaScheduler {
                     .getData()
                     .stream()
                     .filter(this::isNewIGMedia)
-                    .map(instagramMediaDTO -> {
+                    .peek(instagramMediaDTO -> {
                         if (instagramMediaDTO.getCaption() != null) {
                             instagramMediaDTO.getSourceTypes()
                                     .addAll(RegexUtils.findAllowedMatches(instagramMediaDTO.getCaption(), RegexPatterns.SOURCE_TYPES, allowedMatches));
                         }
-                        return instagramMediaDTO;
                     })
                     .collect(Collectors.toList());
 

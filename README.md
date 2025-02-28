@@ -57,7 +57,7 @@ For building and running the application you need :
 ### Cloning the project :
 
 ```sh
-HTTPS: git clone https://github.com/REDWANE-AIT-OUKAZZAMANE/sm-backend.git
+git clone https://github.com/REDWANE-AIT-OUKAZZAMANE/sm-backend.git
 ```
 
 ### Setup Cloud MongoDB
